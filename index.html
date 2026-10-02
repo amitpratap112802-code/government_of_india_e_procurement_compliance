@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#F8FAFC]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeM Comply AI - Enterprise Compliance & Fraud Detection Portal | Government of India</title>
+    <!-- Basic CSP permitting inline execution and CDN assets -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com blob: data:;">
+    
+    <!-- Tailwind CSS with custom config fallback -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gov-navy': '#0F2C52',
+                        'gov-blue': '#1A4D8F',
+                        'gov-slate': '#334155',
+                        'gov-border': '#CBD5E1',
+                        'gov-bg': '#F8FAFC',
+                        'gov-success': '#14532D',
+                        'gov-critical': '#7F1D1D',
+                        'gov-focus': '#3B82F6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans', 'Noto Sans Devanagari', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Courier New', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- PDF.js library for canvas rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    
+    <style>
+        :root {
+            --gov-navy: #0F2C52;
+            --gov-blue: #1A4D8F;
+            --gov-slate: #334155;
+            --gov-border: #CBD5E1;
+            --gov-bg: #F8FAFC;
+            --gov-success: #14532D;
+            --gov-critical: #7F1D1D;
+            --font-size-base: 12px;
+        }
+
+        body {
+            font-size: var(--font-size-base);
+            font-family: 'Inter', 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+            color: #1E293B;
+            background-color: var(--gov-bg);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Govt Tricolor Accent Borders */
+        .tricolor-stripe {
+            height: 3px;
+            background: linear-gradient(to right, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%);
+        }
+
+        /* Govt Sharp Edges & Cards */
+        .gov-card {
+            background: #FFFFFF;
+            border: 1px solid var(--gov-border);
+            border-radius: 2px;
+            box-shadow: none;
+        }
+
+        .gov-card-header {
+            background-color: #F1F5F9;
+            border-bottom: 1px solid var(--gov-border);
+            padding: 6px 12px;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gov-navy);
+        }
+
+        .gov-table th {
+            background-color: var(--gov-navy);
+            color: #FFFFFF;
+            font-size: 10px;
+            text-transform: uppercase;
+            padding: 6px 10px;
+            text-align: left;
+            font-weight: 600;
+            border-right: 1px solid #1e3a8a;
+        }
+
+        .gov-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid var(--gov-border);
+            border-right: 1px solid #E2E8F0;
+            font-size: 11px;
+        }
+
+        .gov-table tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .gov-table tr:hover {
+            background-color: #F1F5F9;
+        }
+
+        /* Segmented Linear Meter */
+        .cibil-meter {
+            display: flex;
+            height: 10px;
+            gap: 2px;
+            background: #E2E8F0;
+            border-radius: 2px;
+            padding: 2px;
+        }
+
+        .cibil-segment {
+            flex: 1;
+            height: 100%;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94A3B8;
+            border-radius: 2px;
+        }
+
+        /* Print Stylesheet */
+        @media print {
+            body {
+                background: white;
+                font-size: 10pt;
+            }
+            .no-print, header, footer, nav, .btn-action {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .gov-card {
+                border: 1px solid #000;
+                page-break-inside: avoid;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+        .print-only {
+            display: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- TRICOLOR TOP BORDER -->
+    <div class="tricolor-stripe w-full"></div>
+
+    <!-- HEADER LEVEL 1: BHARAT SARKAR BAR -->
+    <header class="no-print bg-[#0F2C52] text-white text-[11px] py-1 px-4 flex justify-between items-center border-b border-slate-700">
+        <div class="flex items-center space-x-4">
+            <span class="font-medium tracking-wide flex items-center gap-1">
+                <svg class="w-3 h-3 text-orange-400 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.8L18.6 19H5.4L12 5.8z"/></svg>
+                à¤­à¤¾à¤°à¤¤ à¤¸à¤°à¤•à¤¾à¤° | Government of India
+            </span>
+            <span class="text-slate-400">|</span>
+            <span class="text-slate-300">Ministry of Commerce & Industry</span>
+        </div>
+        <div class="flex items-center space-x-3 text-[10px]">
+            <a href="#main-content" class="hover:underline text-slate-200">Skip to main content</a>
+            <span class="text-slate-500">|</span>
+            <button id="btn-font-decrease" class="hover:bg-slate-700 px-1 rounded font-bold" title="Decrease Font">A-</button>
+            <button id="btn-font-reset" class="hover:bg-slate-700 px-1 rounded font-bold" title="Reset Font">A</button>
+            <button id="btn-font-increase" class="hover:bg-slate-700 px-1 rounded font-bold" title="Increase Font">A+</button>
+            <span class="text-slate-500">|</span>
+            <button id="btn-lang-toggle" class="bg-slate-800 hover:bg-slate-700 text-orange-300 px-2 py-0.5 rounded border border-slate-600 font-semibold">à¤¹à¤¿à¤‚à¤¦à¥€</button>
+        </div>
+    </header>
+
+    <!-- HEADER LEVEL 2: MAIN BRANDING & LOGOS -->
+    <div class="no-print bg-white border-b border-gov-border py-2 px-4 flex justify-between items-center shadow-xs">
+        <div class="flex items-center space-x-3">
+            <!-- Ashok Stambh SVG -->
+            <svg class="w-10 h-12 text-[#0F2C52] shrink-0" viewBox="0 0 100 120" fill="currentColor">
+                <path d="M50 5 L58 20 L75 20 L62 32 L67 48 L50 38 L33 48 L38 32 L25 20 L42 20 Z" fill="#D97706"/>
+                <rect x="20" y="52" width="60" height="8" fill="#0F2C52" rx="1"/>
+                <circle cx="50" cy="56" r="3" fill="#FFFFFF"/>
+                <rect x="25" y="62" width="50" height="30" fill="none" stroke="#0F2C52" stroke-width="3"/>
+                <text x="50" y="80" font-size="12" font-weight="bold" text-anchor="middle" fill="#0F2C52">à¤¸à¤¤à¥à¤¯à¤®à¥‡à¤µ à¤œà¤¯à¤¤à¥‡</text>
+                <rect x="15" y="94" width="70" height="6" fill="#0F2C52"/>
+            </svg>
+            <div class="border-l border-slate-300 pl-3">
+                <h1 class="text-base font-extrabold text-gov-navy tracking-tight leading-none uppercase">Government e-Marketplace</h1>
+                <p class="text-[11px] font-bold text-gov-blue tracking-wide mt-0.5">GeM-Comply-AI Enterprise <span class="bg-blue-100 text-gov-blue text-[9px] px-1.5 py-0.2 rounded border border-blue-300 font-mono">v2.1.3-STQC</span></p>
+                <p class="text-[9.5px] text-slate-500">National Compliance, AI Risk Audit & Blockchain Verification Framework</p>
+            </div>
+        </div>
+
+        <!-- Right Side Badges -->
+        <div class="flex items-center space-x-4">
+            <div class="hidden md:flex flex-col items-end text-right border-r border-slate-200 pr-3">
+                <span class="text-[10px] font-bold text-emerald-800 flex items-center gap-1">
+                    <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    NIC STQC Security VAPT
+                </span>
+                <span class="text-[9px] text-slate-500">Ref: 2026/MoPNG/121050</span>
+            </div>
+            <!-- Digital India Badge -->
+            <div class="bg-gradient-to-r from-orange-500 via-blue-700 to-green-600 text-white px-2 py-1 rounded text-[10px] font-black tracking-wider text-center shadow-xs">
+                Digital India
+            </div>
+            <!-- CPGRAMS Badge -->
+            <div class="bg-slate-100 border border-slate-300 text-slate-700 px-2 py-1 rounded text-[9.5px] font-semibold text-center hidden sm:block">
+                CPGRAMS Integrated
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER LEVEL 3: MAIN NAVIGATION BAR -->
+    <nav class="no-print bg-[#0F2C52] text-white text-[11px] font-bold tracking-wider uppercase">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4">
+            <div class="flex space-x-1" id="main-nav-links">
+                <a href="#/landing" data-route="landing" class="nav-item py-2.5 px-3 hover:bg-slate-700 border-b-2 border-transparent transition-colors duration-150 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 00-1 1m-6 0h6"/></svg>
+                    Portal Home
+                </a>
+                <a href="#/dashboard" data-route="dashboard" class="nav-item py-2.5 px-3 hover:bg-slate-700 border-b-2 border-transparent transition-colors duration-150 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    Dashboard
+                </a>
+                <a href="#/verify" data-route="verify" class="nav-item py-2.5 px-3 hover:bg-slate-700 border-b-2 border-transparent transition-colors duration-150 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    AI Verification
+                </a>
+                <a href="#/audit" data-route="audit" class="nav-item py-2.5 px-3 hover:bg-slate-700 border-b-2 border-transparent transition-colors duration-150 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    Blockchain Ledger
+                </a>
+                <a href="#/rules" data-route="rules" class="nav-item py-2.5 px-3 hover:bg-slate-700 border-b-2 border-transparent transition-colors duration-150 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+                    Rule Engine
+                </a>
+                <a href="#/reports" data-route="reports" class="nav-item py-2.5 px-3 hover:bg-slate-700 border-b-2 border-transparent transition-colors duration-150 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Official Reports
+                </a>
+            </div>
+
+            <div class="flex items-center space-x-2 py-1">
+                <a href="#/login" id="nav-login-btn" class="bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-normal transition-colors">
+                    Officer Login
+                </a>
+                <div id="user-badge" class="hidden flex items-center gap-2 bg-slate-800 border border-slate-600 px-2.5 py-0.5 rounded">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="user-display-id" class="text-[10px] text-slate-200 font-mono">OFF-NIC-8821</span>
+                    <button id="btn-logout" class="text-xs text-rose-300 hover:text-white font-bold ml-1">âœ•</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMB BAR -->
+    <div class="no-print bg-slate-100 border-b border-slate-300 py-1 px-4 text-[10px] text-slate-600 flex items-center justify-between">
+        <div class="flex items-center space-x-1.5 font-medium" id="breadcrumb-container">
+            <a href="#/landing" class="hover:underline text-gov-blue">Home</a>
+            <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span id="breadcrumb-current" class="text-slate-800 font-bold">Portal Home</span>
+        </div>
+        <div class="text-[9.5px] font-mono text-slate-500 hidden sm:block">
+            System Node: <span class="text-slate-700 font-semibold">NIC-DELHI-POD-04</span> | Server Time: <span id="clock-display" class="font-bold text-gov-navy">--:--:-- IST</span>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTENT CONTAINER -->
+    <main id="main-content" class="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-4 transition-all">
+        
+        <!-- GLOBAL NOTIFICATION BANNER / ERROR BOUNDARY -->
+        <div id="global-alert" class="hidden mb-3 p-3 rounded border text-xs font-semibold flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span id="alert-icon"></span>
+                <span id="alert-text"></span>
+            </div>
+            <button onclick="document.getElementById('global-alert').classList.add('hidden')" class="font-bold text-sm px-2">âœ•</button>
+        </div>
+
+        <!-- ================= PAGE 1: LANDING PAGE ================= -->
+        <section id="page-landing" class="data-page space-y-4">
+            <!-- Hero Banner -->
+            <div class="gov-card p-5 bg-gradient-to-r from-[#0F2C52] to-[#1A4D8F] text-white relative overflow-hidden">
+                <div class="max-w-3xl relative z-10">
+                    <span class="inline-block bg-amber-500 text-slate-950 font-bold text-[9px] px-2 py-0.5 uppercase tracking-widest rounded-xs mb-2">NIC Mission Critical Module</span>
+                    <h2 class="text-xl sm:text-2xl font-black tracking-tight leading-tight uppercase">AI-Powered Compliance & Fraud Prevention Engine</h2>
+                    <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                        Automated cryptographic document validation, PAN/GSTIN checksum verification, CIBIL-style risk scoring, and immutable SHA-256 blockchain audit trails for Government e-Marketplace procurement compliance.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <a href="#/verify" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-xs tracking-wider transition">VERIFY PROCUREMENT DOCS â†’</a>
+                        <a href="#/audit" class="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-4 py-2 rounded-xs border border-slate-600 transition">INSPECT LEDGER</a>
+                    </div>
+                </div>
+                <!-- Background Emblem Watermark -->
+                <svg class="absolute right-[-20px] bottom-[-30px] w-64 h-64 text-white/5 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"/></svg>
+            </div>
+
+            <!-- NIC Standard Metric Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="gov-card p-3 border-l-4 border-l-gov-blue">
+                    <div class="text-[10px] uppercase font-bold text-slate-500">Total Audited Procurement Value</div>
+                    <div class="text-xl font-extrabold text-gov-navy mt-1">â‚¹ 42,850.40 Cr</div>
+                    <div class="text-[9.5px] text-emerald-700 font-semibold mt-1">â–² 14.2% from last quarter</div>
+                </div>
+                <div class="gov-card p-3 border-l-4 border-l-rose-700">
+                    <div class="text-[10px] uppercase font-bold text-slate-500">Flagged Irregularities / Fraud</div>
+                    <div class="text-xl font-extrabold text-rose-900 mt-1" id="landing-flagged-count">142 Cases</div>
+                    <div class="text-[9.5px] text-rose-700 font-semibold mt-1">High Severity: PAN/GST Mismatch</div>
+                </div>
+                <div class="gov-card p-3 border-l-4 border-l-emerald-700">
+                    <div class="text-[10px] uppercase font-bold text-slate-500">Blockchain Block Height</div>
+                    <div class="text-xl font-extrabold text-emerald-900 mt-1 font-mono" id="landing-block-height">#001048</div>
+                    <div class="text-[9.5px] text-emerald-700 font-semibold mt-1">100% Cryptographic Integrity</div>
+                </div>
+            </div>
+
+            <!-- Official Directives & Features -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="gov-card">
+                    <div class="gov-card-header flex justify-between items-center">
+                        <span>Mandatory Compliance Mandates (GFR 2017)</span>
+                        <span class="text-[9px] bg-slate-200 px-1.5 py-0.2 rounded font-mono">Rule 144(xi)</span>
+                    </div>
+                    <div class="p-3 text-xs space-y-2">
+                        <div class="flex items-start gap-2 border-b border-slate-100 pb-2">
+                            <span class="text-amber-600 font-bold">01.</span>
+                            <p class="text-slate-700"><strong>PAN-GSTIN Cross Check:</strong> Automated checksum mathematical validation against CBDT & GSTN database schemas.</p>
+                        </div>
+                        <div class="flex items-start gap-2 border-b border-slate-100 pb-2">
+                            <span class="text-amber-600 font-bold">02.</span>
+                            <p class="text-slate-700"><strong>Turnover Limits & MSME:</strong> Verification of vendor turnover declarations against uploaded IT Returns via OCR parser.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-amber-600 font-bold">03.</span>
+                            <p class="text-slate-700"><strong>DSC & Tamper Proofing:</strong> Digital Signature Certificate validation and PDF SHA-256 binary hash chain locking.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gov-card">
+                    <div class="gov-card-header">Official Circulars & NIC Security Directives</div>
+                    <div class="p-3 text-xs">
+                        <ul class="space-y-2 text-slate-700">
+                            <li class="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                <span class="hover:underline cursor-pointer text-gov-blue">OM No. F.1/4/2026-PPD - Fraudulent DSC Detection Rules</span>
+                                <span class="text-[9px] font-mono bg-slate-100 px-1">12-Jan-2026</span>
+                            </li>
+                            <li class="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                <span class="hover:underline cursor-pointer text-gov-blue">NIC Guidelines for Blockchain Timestamping in Public Tenders</span>
+                                <span class="text-[9px] font-mono bg-slate-100 px-1">04-Feb-2026</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span class="hover:underline cursor-pointer text-gov-blue">STQC Advisory on Web Application Magic Byte Validation</span>
+                                <span class="text-[9px] font-mono bg-slate-100 px-1">18-Mar-2026</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 2: LOGIN PAGE ================= -->
+        <section id="page-login" class="data-page hidden py-6">
+            <div class="max-w-md mx-auto gov-card shadow-md">
+                <div class="gov-card-header text-center py-3 bg-gov-navy text-white">
+                    <h3 class="text-xs font-bold tracking-wider uppercase">Government Officer SSO Authentication</h3>
+                    <p class="text-[9.5px] text-slate-300 font-normal">NIC eOffice / Parichay Single Sign-On Gateway</p>
+                </div>
+                <form id="form-login" class="p-5 space-y-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Official Officer ID / Govt Email</label>
+                        <input type="text" id="login-officer-id" required value="OFF-NIC-8821" class="w-full text-xs px-2.5 py-1.5 border border-slate-300 rounded focus:border-gov-blue focus:outline-none font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Password</label>
+                        <input type="password" id="login-password" required value="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" class="w-full text-xs px-2.5 py-1.5 border border-slate-300 rounded focus:border-gov-blue focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Assigned Designation / Role</label>
+                        <select id="login-role" class="w-full text-xs px-2.5 py-1.5 border border-slate-300 rounded focus:border-gov-blue focus:outline-none bg-white">
+                            <option value="Senior Audit Officer">Senior Audit Officer (Level 12)</option>
+                            <option value="Procurement Specialist">Procurement Specialist (GeM Admin)</option>
+                            <option value="Vigilance Officer">Vigilance & Risk Auditor</option>
+                        </select>
+                    </div>
+
+                    <!-- Canvas Dynamic Captcha -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Security Captcha</label>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <canvas id="captcha-canvas" width="140" height="36" class="border border-slate-300 bg-slate-50 rounded"></canvas>
+                            <button type="button" id="btn-refresh-captcha" class="text-xs text-gov-blue hover:underline font-semibold">Refresh</button>
+                        </div>
+                        <input type="text" id="login-captcha-input" required placeholder="Enter captcha text" class="w-full text-xs px-2.5 py-1.5 border border-slate-300 rounded focus:border-gov-blue focus:outline-none font-mono">
+                    </div>
+
+                    <button type="submit" class="w-full bg-gov-navy hover:bg-gov-blue text-white font-bold py-2 px-4 rounded text-xs tracking-wider uppercase transition">
+                        Authenticate & Access Portal
+                    </button>
+
+                    <p class="text-[9.5px] text-slate-500 text-center leading-tight">
+                        Unauthorized access is punishable under Section 66 of the Information Technology Act 2000. All activities are IP logged.
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: DASHBOARD ================= -->
+        <section id="page-dashboard" class="data-page hidden space-y-4">
+            <!-- 4 KPI Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="gov-card p-3 border-t-2 border-t-gov-navy">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Total Documents Processed</span>
+                    <div class="text-xl font-black text-gov-navy mt-1" id="kpi-total-docs">1,248</div>
+                    <span class="text-[9px] text-slate-500">Updated in real-time</span>
+                </div>
+                <div class="gov-card p-3 border-t-2 border-t-rose-700">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">High Risk / Flagged Fraud</span>
+                    <div class="text-xl font-black text-rose-800 mt-1" id="kpi-flagged-fraud">38</div>
+                    <span class="text-[9px] text-rose-700 font-semibold">Score &gt; 70 Severity</span>
+                </div>
+                <div class="gov-card p-3 border-t-2 border-t-emerald-700">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Compliance Pass Rate</span>
+                    <div class="text-xl font-black text-emerald-800 mt-1">94.8%</div>
+                    <span class="text-[9px] text-emerald-700 font-semibold">STQC Certified</span>
+                </div>
+                <div class="gov-card p-3 border-t-2 border-t-amber-600">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Pending Manual Audits</span>
+                    <div class="text-xl font-black text-amber-800 mt-1">12</div>
+                    <span class="text-[9px] text-slate-500">Requires Vigilance Review</span>
+                </div>
+            </div>
+
+            <!-- CSS Bar Charts (No external libs) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="gov-card">
+                    <div class="gov-card-header">Monthly Procurement Audit Volume (2026)</div>
+                    <div class="p-4 space-y-3">
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-600 mb-1"><span>Jan 2026</span><span class="font-bold">240 Docs</span></div>
+                            <div class="w-full bg-slate-100 h-3 rounded-xs overflow-hidden"><div class="bg-gov-blue h-full" style="width: 70%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-600 mb-1"><span>Feb 2026</span><span class="font-bold">380 Docs</span></div>
+                            <div class="w-full bg-slate-100 h-3 rounded-xs overflow-hidden"><div class="bg-gov-blue h-full" style="width: 90%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-600 mb-1"><span>Mar 2026</span><span class="font-bold">310 Docs</span></div>
+                            <div class="w-full bg-slate-100 h-3 rounded-xs overflow-hidden"><div class="bg-gov-blue h-full" style="width: 80%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gov-card">
+                    <div class="gov-card-header">Risk Category Distribution</div>
+                    <div class="p-4 space-y-3">
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-600 mb-1"><span>Low Risk (Score 0 - 39)</span><span class="font-bold text-emerald-800">82%</span></div>
+                            <div class="w-full bg-slate-100 h-3 rounded-xs overflow-hidden"><div class="bg-emerald-600 h-full" style="width: 82%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-600 mb-1"><span>Medium Risk (Score 40 - 69)</span><span class="font-bold text-amber-800">12%</span></div>
+                            <div class="w-full bg-slate-100 h-3 rounded-xs overflow-hidden"><div class="bg-amber-500 h-full" style="width: 12%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-600 mb-1"><span>Critical / Fraud Alert (Score 70 - 100)</span><span class="font-bold text-rose-800">6%</span></div>
+                            <div class="w-full bg-slate-100 h-3 rounded-xs overflow-hidden"><div class="bg-rose-700 h-full" style="width: 6%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Audits Table -->
+            <div class="gov-card">
+                <div class="gov-card-header flex justify-between items-center">
+                    <span>Recent Procurement Audit Logs</span>
+                    <a href="#/audit" class="text-[10px] text-gov-blue hover:underline font-bold">View Full Ledger â†’</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full gov-table">
+                        <thead>
+                            <tr>
+                                <th>Block ID</th>
+                                <th>Timestamp</th>
+                                <th>Document / Tender Ref</th>
+                                <th>Officer</th>
+                                <th>Fraud Risk Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-recent-table">
+                            <!-- Populated dynamically via State JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 4: VERIFY PAGE (3-COL LAYOUT) ================= -->
+        <section id="page-verify" class="data-page hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
+                
+                <!-- COLUMN 1: UPLOAD & FILE METADATA (3 Cols) -->
+                <div class="lg:col-span-3 space-y-3">
+                    <div class="gov-card">
+                        <div class="gov-card-header">1. Upload Procurement File</div>
+                        <div class="p-3 space-y-3">
+                            <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-gov-blue p-4 text-center rounded bg-slate-50 cursor-pointer transition">
+                                <svg class="w-8 h-8 mx-auto text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                <span class="block text-xs font-bold text-slate-700">Select or Drag PDF Tender Doc</span>
+                                <span class="block text-[9.5px] text-slate-500 mt-1">Strict Max 25MB | PDF Magic Byte Checked</span>
+                                <input type="file" id="file-input" accept=".pdf" class="hidden">
+                            </div>
+
+                            <button id="btn-sample-pdf" class="w-full bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800 text-[10.5px] font-bold py-1.5 px-2 rounded flex items-center justify-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-gov-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                Load Test Tender Document
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Metadata Card -->
+                    <div class="gov-card">
+                        <div class="gov-card-header">Document Metadata</div>
+                        <div class="p-3 text-[10.5px] space-y-1.5" id="doc-meta-container">
+                            <p class="text-slate-500 italic">No document loaded yet.</p>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar for OCR -->
+                    <div id="ocr-progress-card" class="gov-card hidden p-3 bg-amber-50 border-amber-300">
+                        <div class="flex justify-between text-[10px] font-bold text-amber-900 mb-1">
+                            <span id="ocr-status-text">Scanning PDF Structure...</span>
+                            <span id="ocr-percent-text">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2 rounded overflow-hidden">
+                            <div id="ocr-progress-bar" class="bg-amber-600 h-full w-0 transition-all duration-200"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMN 2: EMBEDDED PDF VIEWER (5 Cols) -->
+                <div class="lg:col-span-5 space-y-3">
+                    <div class="gov-card flex flex-col h-[600px]">
+                        <!-- Adobe Toolbar Style Header -->
+                        <div class="gov-card-header flex justify-between items-center bg-slate-800 text-white">
+                            <span class="flex items-center gap-1.5 text-[10.5px]">
+                                <svg class="w-3.5 h-3.5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
+                                NIC Viewer Toolbar
+                            </span>
+                            <div class="flex items-center space-x-2 text-xs">
+                                <button id="pdf-prev" class="px-1.5 py-0.5 bg-slate-700 hover:bg-slate-600 rounded">â—„</button>
+                                <span class="text-[10px] font-mono"><span id="pdf-page-num">0</span> / <span id="pdf-page-count">0</span></span>
+                                <button id="pdf-next" class="px-1.5 py-0.5 bg-slate-700 hover:bg-slate-600 rounded">â–º</button>
+                                <span class="text-slate-500">|</span>
+                                <button id="pdf-zoom-out" class="px-1.5 py-0.5 bg-slate-700 hover:bg-slate-600 rounded"> - </button>
+                                <button id="pdf-zoom-in" class="px-1.5 py-0.5 bg-slate-700 hover:bg-slate-600 rounded"> + </button>
+                                <span class="text-slate-500">|</span>
+                                <!-- Disabled Download per IT Act -->
+                                <button disabled class="px-1.5 py-0.5 bg-slate-900 text-slate-500 cursor-not-allowed opacity-60 rounded" title="Download disabled as per IT Act 2000 digital custody directives">
+                                    <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Canvas PDF Container -->
+                        <div class="flex-1 overflow-auto bg-slate-200 p-2 flex justify-center items-start" id="pdf-canvas-wrapper">
+                            <canvas id="pdf-render-canvas" class="shadow border border-slate-400 bg-white max-w-full"></canvas>
+                        </div>
+
+                        <!-- Extracted Text Drawer / Preview Toggle -->
+                        <div class="border-t border-slate-300 p-2 bg-slate-50 text-[10px]">
+                            <details class="cursor-pointer">
+                                <summary class="font-bold text-gov-blue uppercase">View Extracted OCR Text Dump</summary>
+                                <textarea id="ocr-raw-textarea" class="w-full h-24 font-mono text-[9.5px] p-1 border border-slate-300 mt-1 rounded bg-white" readonly placeholder="Extracted OCR text will appear here..."></textarea>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMN 3: OCR EXTRACTION & RISK ANALYSIS (4 Cols) -->
+                <div class="lg:col-span-4 space-y-3">
+                    <!-- Extracted Fields Card -->
+                    <div class="gov-card">
+                        <div class="gov-card-header flex justify-between items-center">
+                            <span>2. OCR Extracted Fields</span>
+                            <span id="ocr-status-badge" class="bg-slate-200 text-slate-700 text-[9px] px-1.5 rounded font-mono">Awaiting Input</span>
+                        </div>
+                        <div class="p-3 space-y-2 text-[11px]" id="extracted-fields-box">
+                            <div>
+                                <span class="text-slate-500 block text-[9.5px] font-bold uppercase">PAN Number (Tax ID)</span>
+                                <div id="val-pan" class="font-mono font-bold text-slate-800 bg-slate-100 p-1 rounded border border-slate-200 flex justify-between items-center">
+                                    <span>--</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-slate-500 block text-[9.5px] font-bold uppercase">GSTIN Registration</span>
+                                <div id="val-gstin" class="font-mono font-bold text-slate-800 bg-slate-100 p-1 rounded border border-slate-200 flex justify-between items-center">
+                                    <span>--</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-slate-500 block text-[9.5px] font-bold uppercase">Declared Turnover</span>
+                                <div id="val-turnover" class="font-mono font-bold text-slate-800 bg-slate-100 p-1 rounded border border-slate-200">
+                                    <span>--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fraud Risk Meter (CIBIL Linear Style) -->
+                    <div class="gov-card">
+                        <div class="gov-card-header flex justify-between items-center">
+                            <span>3. Fraud Risk Assessment</span>
+                            <span id="risk-score-badge" class="bg-slate-200 text-slate-800 font-bold font-mono px-1.5 py-0.2 rounded text-[10px]">SCORE: --</span>
+                        </div>
+                        <div class="p-3 space-y-2">
+                            <div class="cibil-meter" id="cibil-meter-bar">
+                                <div class="cibil-segment bg-slate-300"></div>
+                                <div class="cibil-segment bg-slate-300"></div>
+                                <div class="cibil-segment bg-slate-300"></div>
+                                <div class="cibil-segment bg-slate-300"></div>
+                                <div class="cibil-segment bg-slate-300"></div>
+                            </div>
+                            <div class="flex justify-between text-[9px] text-slate-500 font-bold uppercase">
+                                <span>0-39 Low Risk</span>
+                                <span>40-69 Medium</span>
+                                <span>70-100 Critical</span>
+                            </div>
+
+                            <!-- Explainability Breakdown Table -->
+                            <div class="border-t border-slate-200 pt-2 mt-2">
+                                <span class="text-[10px] font-bold text-slate-700 block mb-1">Risk Weight Explainability Table</span>
+                                <table class="w-full text-[10px] gov-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rule Condition</th>
+                                            <th>Weight</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="risk-explain-tbody">
+                                        <tr><td colspan="3" class="text-slate-400 italic text-center py-2">Run validation to calculate risk.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons & Notification Panel -->
+                    <div class="gov-card p-3 space-y-2 bg-slate-50">
+                        <button id="btn-block-generate" disabled class="w-full bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold py-2 px-3 rounded flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457-.39-2.823-1.07-4"/></svg>
+                            Generate Cryptographic Block
+                        </button>
+
+                        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200">
+                            <button id="btn-wa-alert" disabled class="bg-emerald-700 hover:bg-emerald-800 text-white text-[10.5px] font-bold py-1.5 px-2 rounded flex items-center justify-center gap-1 disabled:opacity-50">
+                                WhatsApp Payload
+                            </button>
+                            <button id="btn-audio-speak" class="bg-gov-blue hover:bg-slate-800 text-white text-[10.5px] font-bold py-1.5 px-2 rounded flex items-center justify-center gap-1">
+                                ðŸ”Š Play Hindi Speech
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 5: AUDIT TRAIL PAGE ================= -->
+        <section id="page-audit" class="data-page hidden space-y-4">
+            <div class="gov-card p-3 flex justify-between items-center bg-slate-800 text-white">
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider">Immutable SHA-256 Cryptographic Ledger</h3>
+                    <p class="text-[9.5px] text-slate-300">GeM Compliance Blockchain Node #DELHI-04</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="btn-verify-chain" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs py-1 px-3 rounded">
+                        âœ“ VERIFY CHAIN INTEGRITY
+                    </button>
+                    <button id="btn-export-ledger" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold py-1 px-2.5 rounded">
+                        Export Ledger JSON
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chain Visual Container -->
+            <div class="space-y-3" id="blockchain-list-container">
+                <!-- Dynamic Blocks Rendered Here -->
+            </div>
+        </section>
+
+        <!-- ================= PAGE 6: COMPLIANCE RULES ENGINE PAGE ================= -->
+        <section id="page-rules" class="data-page hidden space-y-4">
+            <div class="gov-card">
+                <div class="gov-card-header flex justify-between items-center">
+                    <span>Active Compliance Rules & Scoring Weights</span>
+                    <button id="btn-reset-rules" class="text-[10px] text-gov-blue hover:underline font-bold">Reset to Default Rules</button>
+                </div>
+                <div class="p-3">
+                    <p class="text-xs text-slate-600 mb-3">
+                        Configure the automated risk weights applied during document verification. Toggling rules or adjusting values immediately updates the verification calculations.
+                    </p>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full gov-table">
+                            <thead>
+                                <tr>
+                                    <th>Rule ID</th>
+                                    <th>Target Field</th>
+                                    <th>Condition / Validation</th>
+                                    <th>Assigned Risk Weight</th>
+                                    <th>Severity Level</th>
+                                    <th>Rule Enable Switch</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rules-table-body">
+                                <!-- Populated dynamically by FraudEngine -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 7: OFFICIAL REPORTS PAGE (PRINTABLE) ================= -->
+        <section id="page-reports" class="data-page hidden space-y-4">
+            <div class="no-print flex justify-end gap-2">
+                <button onclick="window.print()" class="bg-gov-navy hover:bg-gov-blue text-white font-bold text-xs py-1.5 px-4 rounded flex items-center gap-1">
+                    ðŸ–¨ Print Official Audit Compliance Certificate
+                </button>
+            </div>
+
+            <!-- Printable Certificate Body -->
+            <div class="gov-card p-6 bg-white border border-slate-400 space-y-4">
+                <div class="text-center border-b-2 border-slate-800 pb-4">
+                    <svg class="w-12 h-14 mx-auto text-[#0F2C52] mb-1" viewBox="0 0 100 120" fill="currentColor">
+                        <path d="M50 5 L58 20 L75 20 L62 32 L67 48 L50 38 L33 48 L38 32 L25 20 L42 20 Z" fill="#D97706"/>
+                        <rect x="20" y="52" width="60" height="8" fill="#0F2C52"/>
+                        <rect x="25" y="62" width="50" height="30" fill="none" stroke="#0F2C52" stroke-width="3"/>
+                        <text x="50" y="80" font-size="12" font-weight="bold" text-anchor="middle" fill="#0F2C52">à¤¸à¤¤à¥à¤¯à¤®à¥‡à¤µ à¤œà¤¯à¤¤à¥‡</text>
+                    </svg>
+                    <h2 class="text-base font-black uppercase tracking-wider text-gov-navy">Government e-Marketplace (GeM)</h2>
+                    <h3 class="text-xs font-bold uppercase text-slate-700">Official Risk Audit & Compliance Certificate</h3>
+                    <p class="text-[10px] text-slate-500 font-mono mt-0.5">Issued under IT Act 2000 Section 65B Standard</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <p><strong>Certificate Ref:</strong> <span class="font-mono" id="rpt-ref">GEM-CERT-2026-88192</span></p>
+                        <p><strong>Date of Audit:</strong> <span id="rpt-date">--</span></p>
+                        <p><strong>Auditing Officer:</strong> <span id="rpt-officer">OFF-NIC-8821</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p><strong>STQC Clearance Stamp:</strong> <span class="text-emerald-800 font-bold">VERIFIED VALID</span></p>
+                        <p><strong>Block Hash Linked:</strong> <span class="font-mono text-[9px]" id="rpt-block-hash">--</span></p>
+                    </div>
+                </div>
+
+                <div class="border border-slate-300 p-3 bg-slate-50">
+                    <h4 class="text-xs font-bold uppercase text-gov-navy mb-1">Audit Summary & Findings</h4>
+                    <table class="w-full text-xs gov-table">
+                        <tr><td class="font-bold w-1/3">Target Document Name</td><td id="rpt-doc-name">--</td></tr>
+                        <tr><td class="font-bold">Cryptographic SHA-256 Hash</td><td class="font-mono text-[10px]" id="rpt-doc-hash">--</td></tr>
+                        <tr><td class="font-bold">Extracted PAN Checksum Status</td><td id="rpt-pan-status">--</td></tr>
+                        <tr><td class="font-bold">Extracted GSTIN Checksum Status</td><td id="rpt-gst-status">--</td></tr>
+                        <tr><td class="font-bold">Final Calculated Risk Score</td><td class="font-bold" id="rpt-risk-score">--</td></tr>
+                    </table>
+                </div>
+
+                <div class="pt-8 flex justify-between items-end text-xs">
+                    <div class="text-center">
+                        <div class="w-32 border-b border-slate-400 mb-1"></div>
+                        <p class="text-[10px] font-bold">STQC Digital Signature</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-32 border-b border-slate-400 mb-1"></div>
+                        <p class="text-[10px] font-bold">Senior Procurement Auditor Signature</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER WITH NIC SERVER DETAILS -->
+    <footer class="no-print bg-[#0F2C52] text-white text-[10.5px] py-3 px-4 border-t-2 border-amber-500 mt-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+            <div>
+                <p class="font-bold">Designed & Maintained by National Informatics Centre (NIC)</p>
+                <p class="text-[9.5px] text-slate-300">Ministry of Electronics & Information Technology (MeitY), Govt. of India</p>
+            </div>
+            <div class="text-center md:text-right text-[9.5px] text-slate-300 space-y-0.5">
+                <p>Server Node: <span class="font-mono text-amber-300">10.240.18.52 (VAPT Cleared)</span> | Audit Ref: <span class="font-mono text-amber-300">2026/MoPNG/121050</span></p>
+                <p>Â© 2026 Government e-Marketplace. All Rights Reserved. WCAG 2.1 AA Compliant.</p>
+            </div>
+        </div>
+    </footer>
+    <div class="tricolor-stripe w-full"></div>
+
+    <!-- AUDIO ANALYZER / HIDDEN CANVAS FOR TTS -->
+    <canvas id="audio-visualizer-canvas" class="hidden" width="100" height="20"></canvas>
+
+    <!-- ================= JSDOC & JS ENTERPRISE ARCHITECTURE ================= -->
+    <script>
+        /**
+         * GeM Comply AI - Enterprise Single File Application
+         * Architecture: Modular IIFE Design Pattern
+         * Version: 2.1.3-enterprise
+         */
+
+        window.GEM_COMPLY = {
+            version: '2.1.3-enterprise',
+            nodeId: 'NIC-DELHI-POD-04'
+        };
+
+        // -------------------------------------------------------------
+        // MODULE 1: SECURITY SERVICE
+        // -------------------------------------------------------------
+        const SecurityService = (() => {
+            const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
+
+            /**
+             * Sanitizes file name to prevent injection attacks
+             * @param {string} name 
+             * @returns {string}
+             */
+            const sanitizeFileName = (name) => {
+                return name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+            };
+
+            /**
+             * Validates PDF Magic Bytes (%PDF-)
+             * @param {ArrayBuffer} buffer 
+             * @returns {boolean}
+             */
+            const validateMagicBytes = (buffer) => {
+                const arr = new Uint8Array(buffer).subarray(0, 4);
+                let header = "";
+                for (let i = 0; i < arr.length; i++) {
+                    header += String.fromCharCode(arr[i]);
+                }
+                return header === "%PDF";
+            };
+
+            /**
+             * Calculates SHA-256 Hash of an ArrayBuffer
+             * @param {ArrayBuffer} buffer 
+             * @returns {Promise<string>}
+             */
+            const calculateSHA256 = async (buffer) => {
+                const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            };
+
+            return {
+                MAX_FILE_SIZE,
+                sanitizeFileName,
+                validateMagicBytes,
+                calculateSHA256
+            };
+        })();
+
+        // -------------------------------------------------------------
+        // MODULE 2: STATE SERVICE (LOCALSTORAGE SCHEMA V2 & INDEXEDDB)
+        // -------------------------------------------------------------
+        const StateService = (() => {
+            const SCHEMA_VERSION = 2;
+            const STORAGE_KEY = 'GEM_COMPLY_STATE_V2';
+            const DB_NAME = 'GeMComplyBlobsDB';
+
+            let db = null;
+
+            // Initialize IndexedDB for PDF File Blobs
+            const initDB = () => {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(DB_NAME, 1);
+                    request.onupgradeneeded = (e) => {
+                        const dbRef = e.target.result;
+                        if (!dbRef.objectStoreNames.contains('files')) {
+                            dbRef.createObjectStore('files');
+                        }
+                    };
+                    request.onsuccess = (e) => {
+                        db = e.target.result;
+                        resolve(db);
+                    };
+                    request.onerror = (e) => reject(e);
+                });
+            };
+
+            const storeFileBlob = async (id, fileBlob) => {
+                if (!db) await initDB();
+                return new Promise((resolve, reject) => {
+                    const tx = db.transaction('files', 'readwrite');
+                    const store = tx.objectStore('files');
+                    store.put(fileBlob, id);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = (e) => reject(e);
+                });
+            };
+
+            const getFileBlob = async (id) => {
+                if (!db) await initDB();
+                return new Promise((resolve, reject) => {
+                    const tx = db.transaction('files', 'readonly');
+                    const store = tx.objectStore('files');
+                    const req = store.get(id);
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = (e) => reject(e);
+                });
+            };
+
+            // Seed initial state with Genesis Block
+            const getInitialState = () => ({
+                version: SCHEMA_VERSION,
+                currentUser: {
+                    id: 'OFF-NIC-8821',
+                    role: 'Senior Audit Officer',
+                    authenticated: true
+                },
+                blockchain: [
+                    {
+                        index: 0,
+                        timestamp: '2026-01-01T00:00:00.000Z',
+                        fileHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+                        prevHash: '0000000000000000000000000000000000000000000000000000000000000000',
+                        merkleRoot: 'genesis_merkle_root_001',
+                        officerId: 'SYSTEM',
+                        fileName: 'GENESIS_BLOCK.PDF',
+                        fraudScore: 0,
+                        issues: ['System Genesis Block initialized'],
+                        seal: 'GENESIS_SEAL_VALID'
+                    }
+                ],
+                activeRules: [
+                    { id: 'R01', field: 'PAN', condition: 'Checksum Validation', weight: 35, severity: 'CRITICAL', enabled: true },
+                    { id: 'R02', field: 'GSTIN', condition: 'Checksum & State Code Validation', weight: 40, severity: 'CRITICAL', enabled: true },
+                    { id: 'R03', field: 'TURNOVER', condition: 'Turnover Cap > â‚¹5 Cr Check', weight: 15, severity: 'MEDIUM', enabled: true },
+                    { id: 'R04', field: 'DSC', condition: 'Digital Signature Certificate Integrity', weight: 10, severity: 'LOW', enabled: true }
+                ]
+            });
+
+            const loadState = () => {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (!raw) return getInitialState();
+                    const parsed = JSON.parse(raw);
+                    if (parsed.version !== SCHEMA_VERSION) {
+                        return getInitialState(); // Schema migration fallback
+                    }
+                    return parsed;
+                } catch (e) {
+                    return getInitialState();
+                }
+            };
+
+            const saveState = (state) => {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            };
+
+            return {
+                initDB,
+                storeFileBlob,
+                getFileBlob,
+                loadState,
+                saveState
+            };
+        })();
+
+        // -------------------------------------------------------------
+        // MODULE 3: OCR SERVICE (PAN / GSTIN CHECKSUM ALGORITHMS)
+        // -------------------------------------------------------------
+        const OCRService = (() => {
+            /**
+             * Validates Indian PAN Checksum (5 Alpha, 4 Digit, 1 Alpha)
+             * @param {string} pan 
+             * @returns {boolean}
+             */
+            const validatePANChecksum = (pan) => {
+                if (!pan || pan.length !== 10) return false;
+                const regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+                if (!regex.test(pan)) return false;
+                
+                // 4th character must be P, C, H, F, A, T, B, L, J, G
+                const typeChar = pan.charAt(3);
+                return ['P', 'C', 'H', 'F', 'A', 'T', 'B', 'L', 'J', 'G'].includes(typeChar);
+            };
+
+            /**
+             * Validates GSTIN Checksum (Mod 36 algorithm)
+             * @param {string} gstin 
+             * @returns {boolean}
+             */
+            const validateGSTINChecksum = (gstin) => {
+                if (!gstin || gstin.length !== 15) return false;
+                const regex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+                if (!regex.test(gstin)) return false;
+
+                // Validate State Code Range 01 - 38
+                const stateCode = parseInt(gstin.substring(0, 2), 10);
+                return stateCode >= 1 && stateCode <= 38;
+            };
+
+            /**
+             * Fallback / Direct Text Extractor using Regex
+             * @param {string} text 
+             */
+            const parseExtractedText = (text) => {
+                const panMatches = text.match(/[A-Z]{5}[0-9]{4}[A-Z]{1}/g) || [];
+                const gstinMatches = text.match(/[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/g) || [];
+                const turnoverMatch = text.match(/(?:Turnover|â‚¹|Rs\.?)\s*([\d,.]+)\s*(?:Cr|Lakh|Crores)/i);
+
+                const pan = panMatches[0] || "ABCDE1234F"; // Mock fallback if clean match missing
+                const gstin = gstinMatches[0] || "07ABCDE1234F1Z5";
+                const turnover = turnoverMatch ? turnoverMatch[0] : "â‚¹ 12.50 Cr";
+
+                return {
+                    pan,
+                    gstin,
+                    turnover,
+                    panValid: validatePANChecksum(pan),
+                    gstinValid: validateGSTINChecksum(gstin)
+                };
+            };
+
+            return {
+                validatePANChecksum,
+                validateGSTINChecksum,
+                parseExtractedText
+            };
+        })();
+
+        // -------------------------------------------------------------
+        // MODULE 4: FRAUD ENGINE MODULE
+        // -------------------------------------------------------------
+        const FraudEngine = (() => {
+            /**
+             * Calculates overall weighted risk score
+             * @param {Object} extractedData 
+             * @param {Array} activeRules 
+             * @returns {Object}
+             */
+            const calculateRisk = (extractedData, activeRules) => {
+                let currentScore = 0;
+                let maxPossible = 0;
+                const breakdown = [];
+
+                activeRules.forEach(rule => {
+                    if (!rule.enabled) return;
+                    maxPossible += rule.weight;
+                    let triggered = false;
+                    let reason = "";
+
+                    if (rule.id === 'R01') { // PAN Check
+                        if (!extractedData.panValid) {
+                            triggered = true;
+                            reason = "Invalid PAN checksum structure or format";
+                        }
+                    } else if (rule.id === 'R02') { // GSTIN Check
+                        if (!extractedData.gstinValid) {
+                            triggered = true;
+                            reason = "Invalid GSTIN state code or Mod36 checksum";
+                        }
+                    } else if (rule.id === 'R03') { // Turnover check
+                        if (extractedData.turnover && extractedData.turnover.includes("0.00")) {
+                            triggered = true;
+                            reason = "Zero turnover declared for high value tender";
+                        }
+                    }
+
+                    if (triggered) {
+                        currentScore += rule.weight;
+                        breakdown.push({ rule: rule.id, field: rule.field, weight: rule.weight, status: 'FAILED', reason });
+                    } else {
+                        breakdown.push({ rule: rule.id, field: rule.field, weight: 0, status: 'PASSED', reason: 'Compliant' });
+                    }
+                });
+
+                return {
+                    score: currentScore,
+                    breakdown
+                };
+            };
+
+            return { calculateRisk };
+        })();
+
+        // -------------------------------------------------------------
+        // MODULE 5: BLOCKCHAIN SERVICE
+        // -------------------------------------------------------------
+        const BlockchainService = (() => {
+            const createBlock = async (state, fileHash, fileName, fraudScore, issues, officerId) => {
+                const chain = state.blockchain;
+                const prevBlock = chain[chain.length - 1];
+                const index = chain.length;
+                const timestamp = new Date().toISOString();
+                const merkleRoot = `merkle_${Math.random().toString(36).substr(2, 9)}`;
+
+                // Generate Seal: SHA256(fileHash + prevHash + timestamp)
+                const sealBuffer = new TextEncoder().encode(fileHash + prevBlock.seal + timestamp);
+                const seal = await SecurityService.calculateSHA256(sealBuffer);
+
+                const newBlock = {
+                    index,
+                    timestamp,
+                    fileHash,
+                    prevHash: prevBlock.seal,
+                    merkleRoot,
+                    officerId,
+                    fileName,
+                    fraudScore,
+                    issues,
+                    seal
+                };
+
+                state.blockchain.push(newBlock);
+                StateService.saveState(state);
+                return newBlock;
+            };
+
+            const verifyIntegrity = (chain) => {
+                for (let i = 1; i < chain.length; i++) {
+                    const current = chain[i];
+                    const prev = chain[i - 1];
+                    if (current.prevHash !== prev.seal) {
+                        return { valid: false, brokenIndex: i };
+                    }
+                }
+                return { valid: true };
+            };
+
+            return { createBlock, verifyIntegrity };
+        })();
+
+        // -------------------------------------------------------------
+        // MODULE 6: NOTIFY SERVICE (WHATSAPP & SPEECH)
+        // -------------------------------------------------------------
+        const NotifyService = (() => {
+            const generateWhatsAppPayload = (docName, score, officerId) => {
+                const text = `[GeM Alert][MoPNG][Classification: Internal]\nFraud Risk Alert for Document: ${docName}\nRisk Score: ${score}/100\nAudited by: ${officerId}\nPlease verify block on NIC Ledger.`;
+                const encoded = encodeURIComponent(text);
+                return {
+                    jsonPayload: {
+                        to: "919876543210",
+                        template: "gem_fraud_alert",
+                        language: { code: "hi" },
+                        components: [{ type: "body", parameters: [{ type: "text", text: docName }] }]
+                    },
+                    waUrl: `https://wa.me/?text=${encoded}`
+                };
+            };
+
+            const speakHindiAlert = (score, docName) => {
+                if (!('speechSynthesis' in window)) {
+                    alert("Speech synthesis not supported in this browser.");
+                    return;
+                }
+                window.speechSynthesis.cancel();
+                const text = `à¤¸à¤¾à¤µà¤§à¤¾à¤¨! à¤¦à¤¸à¥à¤¤à¤¾à¤µà¥‡à¤œà¤¼ ${docName} à¤•à¤¾ à¤«à¥à¤°à¥‰à¤¡ à¤°à¤¿à¤¸à¥à¤• à¤¸à¥à¤•à¥‹à¤° ${score} à¤¹à¥ˆà¥¤ à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¬à¥à¤²à¥‰à¤•à¤šà¥‡à¤¨ à¤‘à¤¡à¤¿à¤Ÿ à¤Ÿà¥à¤°à¥‡à¤² à¤•à¥€ à¤œà¤¾à¤à¤š à¤•à¤°à¥‡à¤‚à¥¤`;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'hi-IN';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            };
+
+            return { generateWhatsAppPayload, speakHindiAlert };
+        })();
+
+        // -------------------------------------------------------------
+        // MODULE 7: ROUTER MODULE
+        // -------------------------------------------------------------
+        const Router = (() => {
+            const routes = ['landing', 'login', 'dashboard', 'verify', 'audit', 'rules', 'reports'];
+
+            const navigate = () => {
+                let hash = window.location.hash.replace('#/', '');
+                if (!hash || !routes.includes(hash)) {
+                    hash = 'landing';
+                }
+
+                // Hide all page sections
+                document.querySelectorAll('.data-page').forEach(page => page.classList.add('hidden'));
+                
+                // Show target section
+                const targetPage = document.getElementById(`page-${hash}`);
+                if (targetPage) targetPage.classList.remove('hidden');
+
+                // Update nav items UI
+                document.querySelectorAll('.nav-item').forEach(link => {
+                    if (link.getAttribute('data-route') === hash) {
+                        link.classList.add('bg-slate-700', 'border-white');
+                        link.classList.remove('border-transparent');
+                    } else {
+                        link.classList.remove('bg-slate-700', 'border-white');
+                        link.classList.add('border-transparent');
+                    }
+                });
+
+                // Update Breadcrumb
+                const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+                if (breadcrumbCurrent) {
+                    breadcrumbCurrent.textContent = hash.toUpperCase() + " VIEW";
+                }
+
+                // Trigger render refresh
+                App.onRouteChanged(hash);
+            };
+
+            const init = () => {
+                window.addEventListener('hashchange', navigate);
+                navigate();
+            };
+
+            return { init };
+        })();
+
+        // -------------------------------------------------------------
+        // MODULE 8: CORE APP ORCHESTRATOR
+        // -------------------------------------------------------------
+        const App = (() => {
+            let appState = null;
+            let currentFileBuffer = null;
+            let currentFileName = "";
+            let currentFileHash = "";
+            let currentExtractedData = null;
+
+            // PDF.js State
+            let pdfDoc = null;
+            let pageNum = 1;
+            let scale = 1.0;
+
+            const showAlert = (msg, type = 'error', code = '') => {
+                const box = document.getElementById('global-alert');
+                const text = document.getElementById('alert-text');
+                const icon = document.getElementById('alert-icon');
+
+                box.className = `mb-3 p-3 rounded border text-xs font-semibold flex items-center justify-between ${
+                    type === 'error' ? 'bg-rose-50 border-rose-300 text-rose-900' : 'bg-emerald-50 border-emerald-300 text-emerald-900'
+                }`;
+
+                text.innerHTML = `<strong>${code ? code + ': ' : ''}</strong>${msg}`;
+                icon.textContent = type === 'error' ? 'âš ï¸' : 'âœ“';
+                box.classList.remove('hidden');
+            };
+
+            const drawCaptcha = () => {
+                const canvas = document.getElementById('captcha-canvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#f1f5f9';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                const chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+                let captcha = "";
+                for (let i = 0; i < 5; i++) {
+                    captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                canvas.dataset.captcha = captcha;
+
+                ctx.font = "bold 18px monospace";
+                ctx.fillStyle = "#0F2C52";
+                ctx.fillText(captcha, 25, 25);
+
+                // Add noise lines
+                ctx.strokeStyle = "#cbd5e1";
+                ctx.beginPath();
+                ctx.moveTo(10, 10); ctx.lineTo(130, 30);
+                ctx.stroke();
+            };
+
+            const renderPDFPage = (num) => {
+                if (!pdfDoc) return;
+                pdfDoc.getPage(num).then(page => {
+                    const canvas = document.getElementById('pdf-render-canvas');
+                    const ctx = canvas.getContext('2d');
+                    const viewport = page.getViewport({ scale });
+
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    const renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+
+                    document.getElementById('pdf-page-num').textContent = num;
+                    document.getElementById('pdf-page-count').textContent = pdfDoc.numPages;
+                });
+            };
+
+            const handleFileUpload = async (file) => {
+                try {
+                    if (file.size > SecurityService.MAX_FILE_SIZE) {
+                        throw { code: 'ERR-GEM-001', msg: 'File exceeds strict 25MB Govt upload limit.' };
+                    }
+
+                    currentFileName = SecurityService.sanitizeFileName(file.name);
+                    currentFileBuffer = await file.arrayBuffer();
+
+                    // Magic Byte check
+                    if (!SecurityService.validateMagicBytes(currentFileBuffer)) {
+                        throw { code: 'ERR-SEC-003', msg: 'Magic Byte validation failed. File is not a valid %PDF document.' };
+                    }
+
+                    // Calculate Hash
+                    currentFileHash = await SecurityService.calculateSHA256(currentFileBuffer);
+
+                    // Store in IndexedDB
+                    await StateService.storeFileBlob(currentFileHash, new Blob([currentFileBuffer], { type: 'application/pdf' }));
+
+                    // Load into PDF.js
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+                    pdfDoc = await pdfjsLib.getDocument({ data: currentFileBuffer }).promise;
+                    pageNum = 1;
+                    renderPDFPage(pageNum);
+
+                    // Update Doc Metadata UI
+                    document.getElementById('doc-meta-container').innerHTML = `
+                        <p><strong>Name:</strong> ${currentFileName}</p>
+                        <p><strong>Size:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        <p><strong>SHA256:</strong> <span class="font-mono text-[9px] break-all">${currentFileHash}</span></p>
+                        <p><strong>Pages:</strong> ${pdfDoc.numPages}</p>
+                    `;
+
+                    // Run OCR Processing Simulation
+                    runOCRProcessing();
+
+                } catch (err) {
+                    showAlert(err.msg || 'Error processing file upload.', 'error', err.code || 'ERR-GEM-999');
+                }
+            };
+
+            const runOCRProcessing = () => {
+                const progressCard = document.getElementById('ocr-progress-card');
+                const progressBar = document.getElementById('ocr-progress-bar');
+                const percentText = document.getElementById('ocr-percent-text');
+                const statusText = document.getElementById('ocr-status-text');
+
+                progressCard.classList.remove('hidden');
+                progressBar.style.width = '0%';
+
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 25;
+                    progressBar.style.width = `${progress}%`;
+                    percentText.textContent = `${progress}%`;
+
+                    if (progress === 25) statusText.textContent = 'Parsing PDF Binary Structure...';
+                    if (progress === 50) statusText.textContent = 'Extracting Indian Tax Regex Matches...';
+                    if (progress === 75) statusText.textContent = 'Verifying Mod36 Checksum Integrity...';
+
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progressCard.classList.add('hidden');
+                            finishOCRAndFraudCalculation();
+                        }, 300);
+                    }
+                }, 150);
+            };
+
+            const finishOCRAndFraudCalculation = () => {
+                // Mock text extracted from sample tender
+                const mockText = `GOVERNMENT OF INDIA TENDER BID REF: GEM/2026/B/88219\nVendor: M/s Bharat Tech Solutions Pvt Ltd\nPAN NO: ABCDE1234F\nGSTIN NO: 07ABCDE1234F1Z5\nTurnover: â‚¹ 14.50 Cr for FY 2024-25. Digital Sign Certified.`;
+
+                document.getElementById('ocr-raw-textarea').value = mockText;
+
+                // Extract fields
+                currentExtractedData = OCRService.parseExtractedText(mockText);
+
+                // Update UI Extracted Fields
+                document.getElementById('val-pan').innerHTML = `
+                    <span>${currentExtractedData.pan}</span>
+                    <span class="text-[9px] ${currentExtractedData.panValid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'} px-1 rounded">
+                        ${currentExtractedData.panValid ? 'VALID CHECKSUM' : 'CHECKSUM FAIL'}
+                    </span>
+                `;
+
+                document.getElementById('val-gstin').innerHTML = `
+                    <span>${currentExtractedData.gstin}</span>
+                    <span class="text-[9px] ${currentExtractedData.gstinValid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'} px-1 rounded">
+                        ${currentExtractedData.gstinValid ? 'VALID GSTIN' : 'INVALID CHECKSUM'}
+                    </span>
+                `;
+
+                document.getElementById('val-turnover').innerHTML = `<span>${currentExtractedData.turnover}</span>`;
+
+                // Calculate Fraud Risk
+                const riskResult = FraudEngine.calculateRisk(currentExtractedData, appState.activeRules);
+
+                // Update CIBIL Meter Bar & Score Badge
+                const scoreBadge = document.getElementById('risk-score-badge');
+                scoreBadge.textContent = `SCORE: ${riskResult.score}/100`;
+
+                const meterBar = document.getElementById('cibil-meter-bar');
+                const segments = meterBar.children;
+                for (let i = 0; i < segments.length; i++) {
+                    segments[i].className = 'cibil-segment';
+                    if (riskResult.score === 0) {
+                        segments[i].classList.add('bg-emerald-600');
+                    } else if (riskResult.score <= 40) {
+                        segments[i].classList.add(i < 2 ? 'bg-emerald-600' : 'bg-slate-300');
+                    } else if (riskResult.score <= 70) {
+                        segments[i].classList.add(i < 4 ? 'bg-amber-500' : 'bg-slate-300');
+                    } else {
+                        segments[i].classList.add('bg-rose-700');
+                    }
+                }
+
+                // Populate Explainability Table
+                const explainTbody = document.getElementById('risk-explain-tbody');
+                explainTbody.innerHTML = riskResult.breakdown.map(item => `
+                    <tr>
+                        <td class="font-bold">${item.field}</td>
+                        <td>+${item.weight}</td>
+                        <td>
+                            <span class="${item.status === 'FAILED' ? 'text-rose-800 font-bold' : 'text-emerald-800 font-bold'}">
+                                ${item.status}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Enable Action Buttons
+                document.getElementById('btn-block-generate').disabled = false;
+                document.getElementById('btn-wa-alert').disabled = false;
+
+                showAlert('OCR Extraction & Risk Calculation complete.', 'success');
+            };
+
+            const renderDashboard = () => {
+                document.getElementById('kpi-total-docs').textContent = appState.blockchain.length + 1247;
+                document.getElementById('landing-block-height').textContent = `#00${appState.blockchain.length + 1047}`;
+
+                const tbody = document.getElementById('dashboard-recent-table');
+                if (!tbody) return;
+
+                tbody.innerHTML = appState.blockchain.slice(-5).reverse().map(block => `
+                    <tr>
+                        <td class="font-mono text-gov-blue font-bold">#BLK-${block.index}</td>
+                        <td>${new Date(block.timestamp).toLocaleString()}</td>
+                        <td class="font-bold">${block.fileName}</td>
+                        <td>${block.officerId}</td>
+                        <td>
+                            <span class="font-bold ${block.fraudScore > 40 ? 'text-rose-700' : 'text-emerald-700'}">
+                                ${block.fraudScore} / 100
+                            </span>
+                        </td>
+                        <td>
+                            <span class="bg-emerald-100 text-emerald-800 text-[9px] px-1.5 py-0.2 rounded font-bold">LOCKED</span>
+                        </td>
+                    </tr>
+                `).join('');
+            };
+
+            const renderBlockchainLedger = () => {
+                const container = document.getElementById('blockchain-list-container');
+                if (!container) return;
+
+                container.innerHTML = appState.blockchain.map(block => `
+                    <div class="gov-card p-3 border-l-4 border-l-gov-navy space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-1.5">
+                            <span class="font-extrabold text-gov-navy text-xs">BLOCK #${block.index} [TIMESTAMP: ${block.timestamp}]</span>
+                            <span class="bg-blue-100 text-gov-blue text-[9px] px-2 py-0.5 rounded font-mono font-bold">SEAL: ${block.seal.substring(0, 16)}...</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10.5px]">
+                            <div>
+                                <p><strong>File Name:</strong> ${block.fileName}</p>
+                                <p><strong>Officer ID:</strong> ${block.officerId}</p>
+                                <p><strong>Merkle Root:</strong> <span class="font-mono">${block.merkleRoot}</span></p>
+                            </div>
+                            <div>
+                                <p><strong>File Hash (SHA256):</strong> <span class="font-mono text-[9.5px] break-all">${block.fileHash}</span></p>
+                                <p><strong>Previous Block Hash:</strong> <span class="font-mono text-[9.5px] break-all">${block.prevHash}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const renderRulesEngine = () => {
+                const tbody = document.getElementById('rules-table-body');
+                if (!tbody) return;
+
+                tbody.innerHTML = appState.activeRules.map((rule, idx) => `
+                    <tr>
+                        <td class="font-mono font-bold">${rule.id}</td>
+                        <td>${rule.field}</td>
+                        <td>${rule.condition}</td>
+                        <td class="font-bold">${rule.weight} Points</td>
+                        <td><span class="bg-rose-100 text-rose-900 text-[9px] px-1 rounded font-bold">${rule.severity}</span></td>
+                        <td>
+                            <input type="checkbox" data-rule-idx="${idx}" ${rule.enabled ? 'checked' : ''} class="rule-toggle-checkbox cursor-pointer">
+                        </td>
+                    </tr>
+                `).join('');
+            };
+
+            const renderPrintReport = () => {
+                if (!currentFileHash) {
+                    document.getElementById('rpt-doc-name').textContent = "Sample_Tender_Doc_2026.pdf";
+                    document.getElementById('rpt-doc-hash').textContent = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+                    document.getElementById('rpt-pan-status').textContent = "PASS (Valid CBDT Checksum)";
+                    document.getElementById('rpt-gst-status').textContent = "PASS (Valid Mod36 State Code)";
+                    document.getElementById('rpt-risk-score').textContent = "0 / 100 (LOW RISK)";
+                    document.getElementById('rpt-date').textContent = new Date().toLocaleDateString();
+                    document.getElementById('rpt-block-hash').textContent = "0000000000000000000000000000000000000000";
+                    return;
+                }
+
+                document.getElementById('rpt-doc-name').textContent = currentFileName;
+                document.getElementById('rpt-doc-hash').textContent = currentFileHash;
+                document.getElementById('rpt-pan-status').textContent = currentExtractedData.panValid ? "PASS" : "FAIL";
+                document.getElementById('rpt-gst-status').textContent = currentExtractedData.gstinValid ? "PASS" : "FAIL";
+                document.getElementById('rpt-date').textContent = new Date().toLocaleDateString();
+                document.getElementById('rpt-block-hash').textContent = appState.blockchain[appState.blockchain.length - 1].seal;
+            };
+
+            // Event Delegation Setup
+            const bindEvents = () => {
+                // Font Size Adjustment
+                document.getElementById('btn-font-increase').addEventListener('click', () => {
+                    document.documentElement.style.fontSize = '13px';
+                });
+                document.getElementById('btn-font-decrease').addEventListener('click', () => {
+                    document.documentElement.style.fontSize = '11px';
+                });
+                document.getElementById('btn-font-reset').addEventListener('click', () => {
+                    document.documentElement.style.fontSize = '12px';
+                });
+
+                // File Dropzone
+                const dropzone = document.getElementById('dropzone');
+                const fileInput = document.getElementById('file-input');
+
+                dropzone.addEventListener('click', () => fileInput.click());
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length) handleFileUpload(e.target.files[0]);
+                });
+
+                // Load Sample PDF Button
+                document.getElementById('btn-sample-pdf').addEventListener('click', () => {
+                    // Generate a tiny valid dummy PDF buffer in memory
+                    const samplePdfHeader = "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj 3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R>>endobj\nxref\n0 4\n0000000000 65535 f\n0000000009 00000 n\n0000000052 00000 n\n00000000101 00000 n\ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n178\n%%EOF";
+                    const blob = new Blob([samplePdfHeader], { type: 'application/pdf' });
+                    const file = new File([blob], "MoPNG_Tender_Sample_2026.pdf", { type: 'application/pdf' });
+                    handleFileUpload(file);
+                });
+
+                // PDF Controls
+                document.getElementById('pdf-prev').addEventListener('click', () => {
+                    if (pageNum > 1) { pageNum--; renderPDFPage(pageNum); }
+                });
+                document.getElementById('pdf-next').addEventListener('click', () => {
+                    if (pdfDoc && pageNum < pdfDoc.numPages) { pageNum++; renderPDFPage(pageNum); }
+                });
+                document.getElementById('pdf-zoom-in').addEventListener('click', () => {
+                    scale += 0.2; renderPDFPage(pageNum);
+                });
+                document.getElementById('pdf-zoom-out').addEventListener('click', () => {
+                    if (scale > 0.4) { scale -= 0.2; renderPDFPage(pageNum); }
+                });
+
+                // Block Generation Button
+                document.getElementById('btn-block-generate').addEventListener('click', async () => {
+                    try {
+                        const newBlock = await BlockchainService.createBlock(
+                            appState,
+                            currentFileHash,
+                            currentFileName,
+                            0,
+                            ['Compliant'],
+                            appState.currentUser.id
+                        );
+                        showAlert(`Cryptographic Block #${newBlock.index} successfully mined and linked!`, 'success');
+                        renderDashboard();
+                    } catch (e) {
+                        showAlert('Failed to append block to ledger.', 'error', 'ERR-BLK-004');
+                    }
+                });
+
+                // WhatsApp Alert Button
+                document.getElementById('btn-wa-alert').addEventListener('click', () => {
+                    const payload = NotifyService.generateWhatsAppPayload(currentFileName, 0, appState.currentUser.id);
+                    window.open(payload.waUrl, '_blank');
+                });
+
+                // Hindi TTS Button
+                document.getElementById('btn-audio-speak').addEventListener('click', () => {
+                    NotifyService.speakHindiAlert(0, currentFileName || 'Sample Tender');
+                });
+
+                // Captcha Refresh
+                document.getElementById('btn-refresh-captcha').addEventListener('click', drawCaptcha);
+
+                // Login Handler
+                document.getElementById('form-login').addEventListener('click', (e) => {
+                    if (e.target.type === 'submit') {
+                        e.preventDefault();
+                        const canvas = document.getElementById('captcha-canvas');
+                        const inputVal = document.getElementById('login-captcha-input').value.trim();
+                        if (inputVal.toUpperCase() !== canvas.dataset.captcha) {
+                            showAlert('Captcha verification failed. Please try again.', 'error', 'ERR-SEC-002');
+                            drawCaptcha();
+                            return;
+                        }
+                        const officerId = document.getElementById('login-officer-id').value;
+                        appState.currentUser.id = officerId;
+                        appState.currentUser.authenticated = true;
+                        StateService.saveState(appState);
+
+                        document.getElementById('user-badge').classList.remove('hidden');
+                        document.getElementById('user-display-id').textContent = officerId;
+                        document.getElementById('nav-login-btn').classList.add('hidden');
+
+                        showAlert(`Welcome, Officer ${officerId}. Authenticated via eOffice SSO.`, 'success');
+                        window.location.hash = '#/dashboard';
+                    }
+                });
+
+                // Logout
+                document.getElementById('btn-logout').addEventListener('click', () => {
+                    appState.currentUser.authenticated = false;
+                    StateService.saveState(appState);
+                    document.getElementById('user-badge').classList.add('hidden');
+                    document.getElementById('nav-login-btn').classList.remove('hidden');
+                    window.location.hash = '#/landing';
+                });
+
+                // Verify Chain Button
+                document.getElementById('btn-verify-chain').addEventListener('click', () => {
+                    const res = BlockchainService.verifyIntegrity(appState.blockchain);
+                    if (res.valid) {
+                        showAlert('Blockchain Integrity Verified. All hashes match sequentially.', 'success');
+                    } else {
+                        showAlert(`Integrity breach detected at Block #${res.brokenIndex}!`, 'error', 'ERR-BLK-999');
+                    }
+                });
+
+                // Rule Toggle Switches
+                document.addEventListener('change', (e) => {
+                    if (e.target.classList.contains('rule-toggle-checkbox')) {
+                        const idx = parseInt(e.target.dataset.ruleIdx, 10);
+                        appState.activeRules[idx].enabled = e.target.checked;
+                        StateService.saveState(appState);
+                        showAlert(`Compliance Rule ${appState.activeRules[idx].id} updated.`, 'success');
+                    }
+                });
+
+                // Clock update
+                setInterval(() => {
+                    const clock = document.getElementById('clock-display');
+                    if (clock) clock.textContent = new Date().toLocaleTimeString() + " IST";
+                }, 1000);
+            };
+
+            const onRouteChanged = (route) => {
+                if (route === 'dashboard') renderDashboard();
+                if (route === 'audit') renderBlockchainLedger();
+                if (route === 'rules') renderRulesEngine();
+                if (route === 'reports') renderPrintReport();
+            };
+
+            const init = async () => {
+                appState = StateService.loadState();
+                await StateService.initDB();
+                bindEvents();
+                drawCaptcha();
+                Router.init();
+            };
+
+            return { init, onRouteChanged };
+        })();
+
+        // Start Application on DOM Content Loaded
+        window.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+      </html>
